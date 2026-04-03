@@ -17,7 +17,7 @@ int hall = 0;
 #define HALL PC1
 #define DRAW PD2
 #define TIME PD3
-#define RTC_ADDR SOMETHING
+#define RTC_ADDR 0xD0
 
 //PORTC, PC4 
 //100000 = 16000000/(16+2(x)*1), assumign prescaler is 1, x = 72 
@@ -139,7 +139,7 @@ void update_LCD_draw() {
         temp = read_RTC(2);
         int h = (temp & 0b1111) + ((temp & 0b1110000) >> 4) * 10;
 
-        char buf[6];   
+        char buf[32];   
         sprintf(buf, "%02d:%02d magnetic field:%d", h, m, hall);
     
         lcd_print(buf);
@@ -215,12 +215,12 @@ int main(void) {
     while(1){
         hall = ADC_Read(1);
         if (time_mode_active) {
-            update_LCD_time(true);
+            update_LCD_time();
         } else {
-            update_LCD_draw(true);
+            update_LCD_draw();
         }
     }
-
+    _delay_ms(30);
     return 0;
 }
 
