@@ -4,7 +4,7 @@
 
 **Team Number: 5**
 
-**Team Name:**
+**Team Name: V.E.C.T.O.R**
 
 | Team Member Name | Email Address           |
 | ---------------- | ----------------------- |
