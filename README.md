@@ -119,8 +119,8 @@ For the final demonstration, the device will be put on the table, with the elect
 ### Last week's progress
 
 We designed and fabricated the enclosures for the MNP reservoir and magnetic array. Then we stress-tested the magnets with similar specs to see if they could apply a great enough field to manipulate the particles in the reservoir. When faced with issues, we considered adding a plate to the next version of the device to improve the field strength. We worked on programming the peripherals in C and creating a separate design to hold the electronics.
-`<img width="1297" height="875" alt="image" src="https://github.com/user-attachments/assets/0356666b-a509-477a-8473-7f064e8ddb3e" />`
-`<img width="3024" height="4032" alt="image" src="https://github.com/user-attachments/assets/cba13b42-f50a-414e-84d7-0815bdd7beb0" />`
+
+![1775269485907](image/README/1775269485907.png)
 
 ### Current state of project
 
