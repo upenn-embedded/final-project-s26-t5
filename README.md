@@ -117,14 +117,14 @@ For the final demonstration, the device will be put on the table, with the elect
 ## Sprint Review #1
 
 ### Last week's progress
-
+We designed and fabricated the enclosures for the MNP reservoir and magnetic array. Then we stress-tested the magnets with similar specs to see if they could apply a great enough field to manipulate the particles in the reservoir. When faced with issues, we considered adding a plate to the next version of the device to improve the field strength. We worked on programming the peripherals in C and creating a separate design to hold the electronics.
 ### Current state of project
 
-Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system's two states between time display mode and magnetic drawing mode. 
+Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system between time display mode and magnetic drawing mode. 
 
 ### Next week's plan
 
-The primary plan for next week is to finalize the code for the hardware, make sure its completely working. 
+The primary plan for next week is to finalize the hardware code and ensure it’s fully functional. Once that is verified and we assemble our array, we will (ensuring the reservoir is waterproof) begin running trials on control over the array and ferrofludid.
 
 ## Sprint Review #2
 
