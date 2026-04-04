@@ -117,13 +117,14 @@ For the final demonstration, the device will be put on the table, with the elect
 ## Sprint Review #1
 
 ### Last week's progress
+
 We designed and fabricated the enclosures for the MNP reservoir and magnetic array. Then we stress-tested the magnets with similar specs to see if they could apply a great enough field to manipulate the particles in the reservoir. When faced with issues, we considered adding a plate to the next version of the device to improve the field strength. We worked on programming the peripherals in C and creating a separate design to hold the electronics.
-<img width="1297" height="875" alt="image" src="https://github.com/user-attachments/assets/0356666b-a509-477a-8473-7f064e8ddb3e" />
-<img width="3024" height="4032" alt="image" src="https://github.com/user-attachments/assets/cba13b42-f50a-414e-84d7-0815bdd7beb0" />
+`<img width="1297" height="875" alt="image" src="https://github.com/user-attachments/assets/0356666b-a509-477a-8473-7f064e8ddb3e" />`
+`<img width="3024" height="4032" alt="image" src="https://github.com/user-attachments/assets/cba13b42-f50a-414e-84d7-0815bdd7beb0" />`
 
 ### Current state of project
 
-Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system between time display mode and magnetic drawing mode. 
+Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system between time display mode and magnetic drawing mode. This code is attached in the github as Final_project.c
 
 ### Next week's plan
 
