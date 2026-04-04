@@ -40,7 +40,7 @@ For an input device, we will have a Hall effect sensor probe to ensure that the 
 
 Next, we also have a user interface. Here, the user will be able to press two buttons to demonstrate two separate modes on the electromagnetic array. The first mode will be a clock mode, in which the current time will be spelled out digit-by-digit on the array. The second mode will be an animation mode, in which the array will animate a path of moving magnetic nanoparticles. Telemetry such as the mode and whether a magnetic field was detected by the Hall effect sensor will be displayed on an LCD. We will use an I2C backpack for this LCD, which simplifies communication.
 
-Lastly, we will use a real-time clock (RTC) chip that can tell the time even when the system is not connected to the internet. This chip will use I2C to talk to the MCU. 
+Lastly, we will use a real-time clock (RTC) chip that can tell the time even when the system is not connected to the internet. This chip will use I2C to talk to the MCU.
 
 ![1773670099612](image/README/1773670099612.png)
 
@@ -49,7 +49,6 @@ Lastly, we will use a real-time clock (RTC) chip that can tell the time even whe
 ![1773670181614](image/README/1773670181614.png)
 
 ![1773670189985](image/README/1773670189985.png)
-
 
 The array housing is designed with laser cutting and minimal 3D printing in mind, to offer the fastest and cleanest final product. Using acrylic will be necessary for creating a sealed environment for the suspended MNPs. Everything will be bonded with acrylic glue or screwed together using threaded inserts.
 
@@ -121,7 +120,11 @@ For the final demonstration, the device will be put on the table, with the elect
 
 ### Current state of project
 
+Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system's two states between time display mode and magnetic drawing mode. 
+
 ### Next week's plan
+
+The primary plan for next week is to finalize the code for the hardware, make sure its completely working. 
 
 ## Sprint Review #2
 
