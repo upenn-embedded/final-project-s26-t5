@@ -128,7 +128,7 @@ Initialized I2C communication to interface with an RTC chip and LCD screen. Conf
 
 ### Next week's plan
 
-The primary plan for next week is to finalize the hardware code and ensure it’s fully functional. Once that is verified and we assemble our array, we will (ensuring the reservoir is waterproof) begin running trials on control over the array and ferrofludid.
+The primary plan for next week is to finalize the hardware code and ensure it’s fully functional. Once that is verified and we assemble our array, we will (ensuring the reservoir is waterproof) begin running trials on control over the array and ferrofluid.
 
 ## Sprint Review #2
 
