@@ -122,7 +122,12 @@ We designed and fabricated the enclosures for the MNP reservoir and magnetic arr
 
 ![1775269485907](image/README/1775269485907.png)
 
-### ![1775269665058](image/README/1775269665058.png)Current state of project
+| col1 | col2 | col3 |
+| ---- | ---- | ---- |
+|      |      |      |
+|      |      |      |
+
+### Current state of project
 
 Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system between time display mode and magnetic drawing mode. This code is attached in the github as Final_project.c
 
@@ -134,9 +139,15 @@ The primary plan for next week is to finalize the hardware code and ensure it’
 
 ### Last week's progress
 
+We redesigned the enclosure so that the electromagnets can be screwed in using threaded inserts rather than press-fitted, since press fitting resulted in an uneven surface. The parts for the driver boards and sensors arrived, and we began working on the I2C interface to communicate with the Adafruit solenoid driver boards from the ATmega328PB. We also acquired iron filings and ferrofluid as a fallback in case the magnetic nanoparticle plan doesn't work out.
+
 ### Current state of project
 
+The electromagnet array enclosure has been revised and is being reassembled with the new screw-in mounting approach. I2C communication with the solenoid driver boards is in development. We have magnetic materials on hand (iron filings/ferrofluid) ready for testing once the driver interface is functional. The Hall-effect sensor integration is underway to verify that the electromagnets produce detectable fields at the expected positions in the array.
+
 ### Next week's plan
+
+Complete and validate the I2C driver interface so all 15 electromagnets can be individually controlled. Finish integrating the Hall-effect sensor and confirm reliable magnetic field readings. Begin wiring and programming the user interface components — the LCD display (via I2C backpack), the two mode-select buttons, and the RTC module — to prepare for the MVP demo.
 
 ## MVP Demo
 
