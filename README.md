@@ -145,6 +145,10 @@ We redesigned the enclosure so that the electromagnets can be screwed in using t
 
 The electromagnet array enclosure has been revised and is being reassembled with the new screw-in mounting approach. I2C communication with the solenoid driver boards is in development. We have magnetic materials on hand (iron filings/ferrofluid) ready for testing once the driver interface is functional. The Hall-effect sensor integration is underway to verify that the electromagnets produce detectable fields at the expected positions in the array.
 
+![1775961691284](image/README/1775961691284.png)
+
+![1775961699987](image/README/1775961699987.png)
+
 ### Next week's plan
 
 Complete and validate the I2C driver interface so all 15 electromagnets can be individually controlled. Finish integrating the Hall-effect sensor and confirm reliable magnetic field readings. Begin wiring and programming the user interface components — the LCD display (via I2C backpack), the two mode-select buttons, and the RTC module — to prepare for the MVP demo.
