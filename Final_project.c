@@ -10,8 +10,8 @@
 #include "lcd.h"
 
 
-bool time_mode_active = false;
-bool draw_mode_active = false;
+volatile bool time_mode_active = false;
+volatile bool draw_mode_active = false;
 int hall = 0; 
 
 #define HALL PC1
@@ -19,17 +19,13 @@ int hall = 0;
 #define TIME PD3
 #define RTC_ADDR 0xD0
 
-//PORTC, PC4 
-//100000 = 16000000/(16+2(x)*1), assumign prescaler is 1, x = 72 
-//100kHz SCL frequency.
-
 //SOURCES
 //https://github.com/hooperwf1/rtclock/blob/main/schematic.png
 //https://github.com/hooperwf1/rtclock/blob/main/main.c
 //https://github.com/hwfranck/lcd-avr-i2c/blob/main/src/i2c.c
 
 void write_RTC(int addr, int data) {
-    start_TWI(RTC_ADDR);
+    i2c_start(RTC_ADDR);
 
     // Write first address
     TWDR = addr;
@@ -49,7 +45,7 @@ void write_RTC(int addr, int data) {
 }
 
 char read_RTC(int addr) {
-    start_TWI(RTC_ADDR);
+    i2c_start(RTC_ADDR);
 
     // Write first address
     TWDR = addr;
@@ -64,7 +60,7 @@ char read_RTC(int addr) {
 
     // Wait for start
     while(!(TWCR & (1 << TWINT)));
-    if((TWSR & 0xF8) != TW_START){
+    if((TWSR & 0xF8) != TW_REP_START){
         return 0;
     }
 
@@ -83,34 +79,8 @@ char read_RTC(int addr) {
     }
     char temp = TWDR;
 
-    stop_TWI();
+    i2c_stop();
     return temp;
-}
-
-void init_TWI(){
-    TWBR = 10; // SCL 10kHz
-}
-
-void stop_TWI(){
-    TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
-}
-
-void start_TWI(int addr){
-    TWCR |= (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-
-    // Start
-    while (!(TWCR & (1 << TWINT)));
-    if((TWSR & 0xF8) != TW_START){
-        return;
-    }
-
-    // Slave write Address
-    TWDR = addr;
-    TWCR = (1 << TWINT) | (1 << TWEN);
-    while(!(TWCR & (1 << TWINT)));
-    if((TWSR & 0xF8) != TW_MT_SLA_ACK && (TWSR & 0xF8) != TW_MR_SLA_ACK){
-        return;
-    }
 }
 
 void update_LCD_time() {
@@ -220,7 +190,6 @@ int main(void) {
             update_LCD_draw();
         }
     }
-    _delay_ms(30);
     return 0;
 }
 
