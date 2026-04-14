@@ -89,6 +89,6 @@ void i2c_stop(void)			/* I2C stop function */
 void send_over_twi(uint8_t data) {
 
 	i2c_start(LCD_ADDR);
-	i2c_send(data);
+	i2c_write(data);
 	i2c_stop();
 }
