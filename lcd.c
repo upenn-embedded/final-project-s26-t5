@@ -2,7 +2,12 @@
 #include "i2c.h"
 
 #include <avr/io.h>
-#include <util/delay.h>
+#include <avr/interrupt.h>
+#include <stdbool.h>
+
+#include <stdio.h>      
+#include <util/delay.h> 
+#include <util/twi.h>    
 
 void lcd_clear(void) {
 
@@ -61,7 +66,7 @@ void lcd_init(void) {
 	lcd_command_write(ENTRY_MODE_SET, BIT_MODE_4);	//
 	lcd_command_write(DISPLAY_ON, BIT_MODE_4);
 
-	//	lcd_print("Display ready.");	// can be removed
+	lcd_print("Display ready.");	// can be removed
 }
 
 void lcd_load_pattern(uint8_t index_pattern) {

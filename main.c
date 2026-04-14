@@ -85,6 +85,7 @@ char read_RTC(int addr) {
 
 void update_LCD_time() {
         // Minutes
+        lcd_move_cursor(0, 0);
         char temp;
         temp = read_RTC(1);
         int m = (temp & 0b1111) + ((temp & 0b1110000) >> 4) * 10;
@@ -101,6 +102,7 @@ void update_LCD_time() {
 
 void update_LCD_draw() {
         // Minutes
+        lcd_move_cursor(0, 0);
         char temp;
         temp = read_RTC(1);
         int m = (temp & 0b1111) + ((temp & 0b1110000) >> 4) * 10;
@@ -152,7 +154,7 @@ int ADC_Read(char channel)
 	int Ain,AinLow;
 	
 	ADMUX=ADMUX|(channel & 0x0f);	/* Set input channel to read */
-
+    ADCSRA |= (1<<ADIF);   // add this line — clears flag by writing 1
 	ADCSRA |= (1<<ADSC);		/* Start conversion */
 	while((ADCSRA&(1<<ADIF))==0);	/* Monitor end of conversion interrupt */
 	
@@ -166,6 +168,7 @@ int ADC_Read(char channel)
 
 int main(void) {
     i2c_init();
+    i2c_scan();   // find the LCD address first
     lcd_init(); 
     init_hall_sensor(); 
     ADC_Init();

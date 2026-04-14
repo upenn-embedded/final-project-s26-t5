@@ -1,10 +1,15 @@
 #include "i2c.h"
 
 #include <avr/io.h>
-#include <util/delay.h>
-#include <util/twi.h>
+#include <avr/interrupt.h>
+#include <stdbool.h>
+
+#include <stdio.h>      
+#include <util/delay.h> 
+#include <util/twi.h>    
 
 #define LCD_ADDR 0x4E
+
 void i2c_init(void) {
 	//100000 = 16000000/(16+2(x)*1), assumign prescaler is 1, x = 72 
 	//100kHz SCL frequency.

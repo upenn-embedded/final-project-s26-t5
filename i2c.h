@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>	// uint8_t
+extern uint8_t LCD_ADDR;
 
 void i2c_init(void);
 uint8_t i2c_start(uint8_t address);
