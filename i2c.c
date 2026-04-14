@@ -8,12 +8,23 @@
 #include <util/delay.h> 
 #include <util/twi.h>    
 
-#define LCD_ADDR 0x4E
+uint8_t LCD_ADDR = 0; 
+
+void i2c_scan() {
+    for (uint8_t addr = 0x08; addr < 0x78; addr++) {
+        uint8_t result = i2c_start(addr << 1); // shift to 8-bit
+        i2c_stop();
+        if (result == 1) {
+            LCD_ADDR = addr<<1;
+        }
+    }
+}
 
 void i2c_init(void) {
 	//100000 = 16000000/(16+2(x)*1), assumign prescaler is 1, x = 72 
 	//100kHz SCL frequency.
 	// Only configure the clock
+	TWSR = 0x00;  // clear prescaler bits
 	TWBR = 72;	// TWBR = ( (cpu_freq / scl_freq) - 16 ) / 2 / 4^twps
 }
 
