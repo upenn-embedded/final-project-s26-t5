@@ -1,8 +1,14 @@
 #include "i2c.h"
 
 #include <avr/io.h>
+<<<<<<< HEAD
 #include <avr/interrupt.h>
 #include <stdbool.h>
+=======
+#include <util/delay.h>
+#include <util/twi.h>
+#include <stdint.h>
+>>>>>>> 8983ff0 (solenoid driver working)
 
 #include <stdio.h>      
 #include <util/delay.h> 
@@ -21,6 +27,7 @@ void i2c_scan() {
 }
 
 void i2c_init(void) {
+<<<<<<< HEAD
 	//100000 = 16000000/(16+2(x)*1), assumign prescaler is 1, x = 72 
 	//100kHz SCL frequency.
 	// Only configure the clock
@@ -100,11 +107,90 @@ void i2c_stop(void)			/* I2C stop function */
 {
     TWCR=(1<<TWSTO)|(1<<TWINT)|(1<<TWEN);/* Enable TWI, generate stop */
     while(TWCR&(1<<TWSTO));	/* Wait until stop condition execution */
+=======
+	// Only configure the clock
+	PRR0 &= ~(1 << PRTWI0);
+	TWSR0 = 0x00;
+	TWBR0 = 72;	// TWBR = ( (cpu_freq / scl_freq) - 16 ) / 2 / 4^twps
+	TWCR0 |= (1 << TWEN);
 }
 
-void send_over_twi(uint8_t data) {
+uint8_t i2c_send(uint8_t data) {
+	uint8_t retry_count = 0;
 
+	while (retry_count < MAX_RETRIES) {
+
+		TWDR0 = data;
+		TWCR0 = (1 << TWINT) | (1 << TWEN);
+		i2c_wait();
+
+		if ((TWSR0 & 0xF8) == TW_MT_DATA_ACK){
+			return 1;
+		}
+
+		retry_count++;
+	}
+	
+	return 0;
+}
+
+uint8_t i2c_start(uint8_t address) {
+	uint8_t retry_count = 0;
+
+	while (retry_count < MAX_RETRIES) {
+		TWCR0 = (1 << TWINT) | (1 << TWEN) | (1 << TWSTA);
+		i2c_wait();
+
+		if (((TWSR0 & 0xF8) != TW_START) && ((TWSR0 & 0xF8) != TW_REP_START)){
+			retry_count++;
+			continue;
+		}
+
+		TWDR0 = address;
+		TWCR0 = (1 << TWINT) | (1 << TWEN);
+		i2c_wait();
+
+		uint8_t status = (TWSR0 & 0xF8);
+		if (status == TW_MT_SLA_ACK || status == TW_MR_SLA_ACK) {
+			return 1;
+		}
+
+		retry_count++;
+	}
+
+	return 0;
+}
+
+void i2c_stop(void) {
+	TWCR0 = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
+}
+
+void i2c_wait (void ) {
+	while (!(TWCR0 & (1 << TWINT))) {}
+>>>>>>> 8983ff0 (solenoid driver working)
+}
+
+uint8_t i2c_write_register(uint8_t addr7, uint8_t reg, uint8_t data) {
+	if (!i2c_start((addr7 << 1) | 0)) {
+		i2c_stop();
+		return 0;
+	}
+
+	if (!i2c_send(reg)) {
+		i2c_stop();
+		return 0;
+	}
+
+	if (!i2c_send(data)) {
+		i2c_stop();
+		return 0;
+	}
+
+<<<<<<< HEAD
 	i2c_start(LCD_ADDR);
 	i2c_write(data);
+=======
+>>>>>>> 8983ff0 (solenoid driver working)
 	i2c_stop();
+	return 1;
 }
