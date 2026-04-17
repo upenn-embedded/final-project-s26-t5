@@ -159,7 +159,23 @@ https://docs.google.com/presentation/d/1lgXZZuJsAKx94grMAz8MiSn8iH7MAbFuXWXLTbPi
 
 ^MVP Demo Presentation
 
-All hardware requirement specifications met, all but one software requirement specification met. 
+![1776449079207](image/README/1776449079207.png)
+
+1. So far we have implemented the Atmega with the power management system with the two solenoid drivers that power the 15 electromagents (3x5) array. Right now, we have a petri-dish of ferrofluid that we can move across the array, and we programmed it so it turns on the magnets sequentially row by row. We also built a separate system with the ATmega and the peripherals with the LCD display and the buttons that toggle between time mode and animation mode, as well as taking in analog readings from the Hall effect sensor and displaying them on the LCD.
+2. Our firmware centers on the ATmega328PB, which manages the system’s two main modes: time display and animation. In time mode, the microcontroller reads the current time from the RTC over I²C, and should convert it into the corresponding activation pattern for the 3×5 electromagnet array (we have yet to do this), and updates the display; in animation mode, it instead steps through predefined electromagnet sequences to generate motion (we have yet to do this). The firmware also reads the hall-effect sensor, updates the LCD with status information, and uses button-triggered interrupts to switch modes quickly and reliably. The most important drivers we wrote were the I²C driver for communication with the RTC and solenoid-control hardware, the RTC driver for register-level time reads and writes, the button interrupt logic for mode changes.
+
+    4. We have achieved all of our software requirement specifications except one: The system displaying the time obtained by the RTC chip through the ferrofluid controlled by the electromagnets. For all the other software specification requirements, we were able to see it working, for example, the time and mode being displayed on the LCD display.
+
+    5. We have achieved all of our hardware requirement specifications.
+
+    6 &7.![1776449890355](image/README/1776449890355.png)
+
+![1776449902245](image/README/1776449902245.png)
+
+Right now, we are still just using a petri dish to hold the ferro fluid that we put on top of the magnets. We tried making an acryllic container to put the ferrofluid on top of, but it stained the acrylic glass, so now we are looking for other options. That would be what I would say is the most riskiest part of the project. We also have to make the caseing for all the electronics, to place the led display and buttons and to put the breadboard and everything, to make the project look nice and functional. 
+
+8. No questions for the teaching team.
+
 
 ## Final Report
 
