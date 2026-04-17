@@ -155,6 +155,12 @@ Complete and validate the I2C driver interface so all 15 electromagnets can be i
 
 ## MVP Demo
 
+https://docs.google.com/presentation/d/1lgXZZuJsAKx94grMAz8MiSn8iH7MAbFuXWXLTbPirKE/edit?usp=sharing 
+
+^MVP Demo Presentation
+
+All hardware requirement specifications met, all but one software requirement specification met. 
+
 ## Final Report
 
 Don't forget to make the GitHub pages public website!
