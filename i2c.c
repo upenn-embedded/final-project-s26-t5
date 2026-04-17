@@ -1,121 +1,136 @@
-#ifndef F_CPU
-#define F_CPU 16000000UL
-#endif
-
 #include "i2c.h"
 
 #include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdbool.h>
+#include <util/delay.h>
+#include <util/twi.h>
+#include <stdint.h>
 
-#include <stdio.h>      
-#include <util/delay.h> 
-#include <util/twi.h>    
-
-uint8_t LCD_ADDR = 0; 
-
-void i2c_scan(void) {
-    for (uint8_t addr = 0x08; addr < 0x78; addr++) {
-        if (addr == 0x68) {
-            continue;
-        }
-        uint8_t result = i2c_start(addr << 1);
-        i2c_stop();
-        if (result == 1) {
-            LCD_ADDR = addr << 1;
-            break;
-        }
-    }
-    if (LCD_ADDR == 0) {
-        LCD_ADDR = (uint8_t)(0x27 << 1);
-    }
-}
+const uint8_t MAX_RETRIES = 5;
 
 void i2c_init(void) {
-	DDRC &= ~((1 << PC4) | (1 << PC5));
-	PORTC |= (1 << PC4) | (1 << PC5);
-
+	// Only configure the clock
+	PRR0 &= ~(1 << PRTWI0);
 	TWSR0 = 0x00;
-	TWBR0 = 72;
+	TWBR0 = 72;	// TWBR = ( (cpu_freq / scl_freq) - 16 ) / 2 / 4^twps
+	TWCR0 |= (1 << TWEN);
+}
+
+uint8_t i2c_send(uint8_t data) {
+	uint8_t retry_count = 0;
+
+	while (retry_count < MAX_RETRIES) {
+
+		TWDR0 = data;
+		TWCR0 = (1 << TWINT) | (1 << TWEN);
+		i2c_wait();
+
+		if ((TWSR0 & 0xF8) == TW_MT_DATA_ACK){
+			return 1;
+		}
+
+		retry_count++;
+	}
+	
+	return 0;
 }
 
 uint8_t i2c_start(uint8_t address) {
-	uint8_t status;		/* Declare variable */
-    TWCR0=(1<<TWSTA)|(1<<TWEN)|(1<<TWINT); /* Enable TWI, generate START */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    status=TWSR0&0xF8;		/* Read TWI status register */
-    if(status!=0x08)		/* Check weather START transmitted or not? */
-    return 0;			/* Return 0 to indicate start condition fail */
-    TWDR0=address;		/* Write SLA+W in TWI data register */
-    TWCR0=(1<<TWEN)|(1<<TWINT);	/* Enable TWI & clear interrupt flag */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    status=TWSR0&0xF8;		/* Read TWI status register */	
-    if(status==0x18)		/* Check for SLA+W transmitted &ack received */
-    return 1;			/* Return 1 to indicate ack received */
-    if(status==0x20)		/* Check for SLA+W transmitted &nack received */
-    return 2;			/* Return 2 to indicate nack received */
-    else
-    return 3;			/* Else return 3 to indicate SLA+W failed */
+	uint8_t retry_count = 0;
+
+	while (retry_count < MAX_RETRIES) {
+		TWCR0 = (1 << TWINT) | (1 << TWEN) | (1 << TWSTA);
+		i2c_wait();
+
+		if (((TWSR0 & 0xF8) != TW_START) && ((TWSR0 & 0xF8) != TW_REP_START)){
+			retry_count++;
+			continue;
+		}
+
+		TWDR0 = address;
+		TWCR0 = (1 << TWINT) | (1 << TWEN);
+		i2c_wait();
+
+		uint8_t status = (TWSR0 & 0xF8);
+		if (status == TW_MT_SLA_ACK || status == TW_MR_SLA_ACK) {
+			return 1;
+		}
+
+		retry_count++;
+	}
+
+	return 0;
 }
 
-uint8_t i2c_repeated_start(uint8_t address) /* I2C repeated start function (SLA+R)*/ 
-{
-    uint8_t status;		/* Declare variable */
-    TWCR0=(1<<TWSTA)|(1<<TWEN)|(1<<TWINT);/* Enable TWI, generate start */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    status=TWSR0&0xF8;		/* Read TWI status register */
-    if(status!=0x10)		/* Check for repeated start transmitted */
-    return 0;			/* Return 0 for repeated start condition fail */
-    TWDR0=address;		/* Write SLA+R in TWI data register */
-    TWCR0=(1<<TWEN)|(1<<TWINT);	/* Enable TWI and clear interrupt flag */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    status=TWSR0&0xF8;		/* Read TWI status register */
-    if(status==0x40)		/* Check for SLA+R transmitted &ack received */
-    return 1;			/* Return 1 to indicate ack received */
-    if(status==0x48)		/* Check for SLA+R transmitted &nack received */
-    return 2;			/* Return 2 to indicate nack received */
-    else
-    return 3;			/* Else return 3 to indicate SLA+W failed */
+void i2c_stop(void) {
+	TWCR0 = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
 }
 
-uint8_t i2c_write(uint8_t data)	/* I2C write function */
-{
-    uint8_t status;		/* Declare variable */
-    TWDR0=data;			/* Copy data in TWI data register */
-    TWCR0=(1<<TWEN)|(1<<TWINT);	/* Enable TWI and clear interrupt flag */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    status=TWSR0&0xF8;		/* Read TWI status register */
-    if(status==0x28)		/* Check for data transmitted &ack received */
-    return 0;			/* Return 0 to indicate ack received */
-    if(status==0x30)		/* Check for data transmitted &nack received */
-    return 1;			/* Return 1 to indicate nack received */
-    else
-    return 2;			/* Else return 2 for data transmission failure */
+void i2c_wait (void ) {
+	while (!(TWCR0 & (1 << TWINT))) {}
 }
 
-char i2c_read_ack()		/* I2C read ack function */
-{
-    TWCR0=(1<<TWEN)|(1<<TWINT)|(1<<TWEA); /* Enable TWI, generation of ack */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    return TWDR0;			/* Return received data */
-}
+uint8_t i2c_write_register(uint8_t addr7, uint8_t reg, uint8_t data) {
+	if (!i2c_start((addr7 << 1) | 0)) {
+		i2c_stop();
+		return 0;
+	}
 
-char i2c_read_nack()		/* I2C read nack function */
-{
-    TWCR0=(1<<TWEN)|(1<<TWINT);	/* Enable TWI and clear interrupt flag */
-    while(!(TWCR0&(1<<TWINT)));	/* Wait until TWI finish its current job */
-    return TWDR0;		/* Return received data */
-} 
+	if (!i2c_send(reg)) {
+		i2c_stop();
+		return 0;
+	}
 
-void i2c_stop(void)			/* I2C stop function */
-{
-    TWCR0=(1<<TWSTO)|(1<<TWINT)|(1<<TWEN);/* Enable TWI, generate stop */
-    while(TWCR0&(1<<TWSTO));	/* Wait until stop condition execution */
-}
+	if (!i2c_send(data)) {
+		i2c_stop();
+		return 0;
+	}
 
-void send_over_twi(uint8_t data) {
-
-	i2c_start(LCD_ADDR);
-	i2c_write(data);
 	i2c_stop();
+	return 1;
+}
+
+//read one byte
+uint8_t i2c_read(uint8_t* data, uint8_t send_ack) {
+    TWCR0 = (1 << TWINT) | (1 << TWEN) | (send_ack ? (1 << TWEA) : 0);
+    i2c_wait();
+    
+    uint8_t status = TWSR0 & 0xF8;
+    if (send_ack && status != TW_MR_DATA_ACK) {
+        return 0;
+    }
+    
+    if (!send_ack && status != TW_MR_DATA_NACK) {
+        return 0;
+    }
+    
+    *data = TWDR0;
+    return 1;
+}
+
+uint8_t i2c_read_registers(uint8_t addr7, uint8_t reg, uint8_t* buf, uint8_t len) {
+    if (!i2c_start((addr7 << 1) | 0)) {
+        i2c_stop();
+        return 0;
+    }
+    
+    if(!i2c_send(reg)) {
+        i2c_stop();
+        return 0;
+    }
+    
+    if(!i2c_start((addr7 << 1) | 1)) {
+        i2c_stop();
+        return 0;
+    }
+    
+    for (uint8_t i = 0; i < len; i++) {
+        uint8_t ack = (i < len - 1) ? 1 : 0;
+        if (!i2c_read(&buf[i], ack)) {
+            i2c_stop();
+            return 0;
+        }
+    }
+    
+    i2c_stop();
+    return 1;
 }
