@@ -71,6 +71,7 @@ char read_RTC(int addr) {
     }
 
     TWDR0 = RTC_ADDR | 1;
+
     TWCR0 = (1 << TWINT) | (1 << TWEN);
     while (!(TWCR0 & (1 << TWINT)));
     if ((TWSR0 & 0xF8) != TW_MR_SLA_ACK) {
@@ -126,25 +127,24 @@ void update_LCD_draw(void) {
 }
 
 void init_hall_sensor() {
-    //PC1 is the input for the hall sensor. 
+
     DDRC &= ~(1 << HALL); 
 }
 
 bool read_hall_sensor() {
-    //return whether or not the hall sensor reads a magnetic field or not.  
+
     return (PINC & (1 << HALL));
 }
 
 void init_button_interrupts() {
-    //PD2(INT0) and PD3(INT1) are input buttons 
+
     DDRD &= ~((1 << DRAW) | (1 << TIME)); 
-    //Enable Pull up resistors 
+
     PORTD |= (1 << DRAW) | (1 << TIME);
 
-    /* Falling edge: pressed = low (buttons use pull-ups) */
     EICRA |= (1 << ISC01) | (1 << ISC11);
     EICRA &= (uint8_t)~((1 << ISC00) | (1 << ISC10));
-    //External Interrupt Mask Register (turns these external pins on)
+
     EIMSK |= (1<<INT1) | (1<<INT0);
 
 }
@@ -162,17 +162,17 @@ int ADC_Read(char channel)
 {
 	int Ain,AinLow;
 	
-	ADMUX=ADMUX|(channel & 0x0f);	/* Set input channel to read */
-    ADCSRA |= (1<<ADIF);   // add this line — clears flag by writing 1
-	ADCSRA |= (1<<ADSC);		/* Start conversion */
-	while((ADCSRA&(1<<ADIF))==0);	/* Monitor end of conversion interrupt */
+	ADMUX=ADMUX|(channel & 0x0f);	
+    ADCSRA |= (1<<ADIF);   
+	ADCSRA |= (1<<ADSC);		
+	while((ADCSRA&(1<<ADIF))==0);	
 	
 	_delay_us(10);
-	AinLow = (int)ADCL;		/* Read lower byte*/
-	Ain = (int)ADCH*256;		/* Read higher 2 bits and 
-					Multiply with weight */
+	AinLow = (int)ADCL;		
+	Ain = (int)ADCH*256;		
+		
 	Ain = Ain + AinLow;				
-	return(Ain);			/* Return digital value*/
+	return(Ain);			
 }
 
 int main(void) {
@@ -185,7 +185,6 @@ int main(void) {
 
     sei(); 
 
-    // We need to alter CH and 24 hour bits without chaning time
     char mins = read_RTC(0);
     mins &= ~(1 << 7);
     write_RTC(0, mins);
@@ -221,14 +220,12 @@ int main(void) {
 }
 
 
-/* INT0 = PD2 = DRAW */
 ISR(INT0_vect) {
     draw_mode_active = true;
     time_mode_active = false;
     mode_banner = 2;
 }
 
-/* INT1 = PD3 = TIME */
 ISR(INT1_vect) {
     time_mode_active = true;
     draw_mode_active = false;
