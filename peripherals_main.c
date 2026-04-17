@@ -12,7 +12,7 @@
 #include <util/twi.h>    
 
 #include "i2c.h"
-#include "lcd.h"
+#include "lcd_peripherals.h"
 
 
 volatile bool time_mode_active = true;

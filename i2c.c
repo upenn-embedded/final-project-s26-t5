@@ -134,3 +134,29 @@ uint8_t i2c_read_registers(uint8_t addr7, uint8_t reg, uint8_t* buf, uint8_t len
     i2c_stop();
     return 1;
 }
+
+uint8_t LCD_ADDR = 0; 
+
+void i2c_scan(void) {
+    for (uint8_t addr = 0x08; addr < 0x78; addr++) {
+        if (addr == 0x68) {
+            continue;
+        }
+        uint8_t result = i2c_start(addr << 1);
+        i2c_stop();
+        if (result == 1) {
+            LCD_ADDR = addr << 1;
+            break;
+        }
+    }
+    if (LCD_ADDR == 0) {
+        LCD_ADDR = (uint8_t)(0x27 << 1);
+    }
+}
+
+void send_over_twi(uint8_t data) {
+
+	i2c_start(LCD_ADDR);
+	i2c_send(data);
+	i2c_stop();
+}

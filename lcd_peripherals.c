@@ -2,7 +2,7 @@
 #define F_CPU 16000000UL
 #endif
 
-#include "lcd.h"
+#include "lcd_peripherals.h"
 #include "i2c.h"
 
 #include <avr/io.h>
