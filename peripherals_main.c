@@ -30,67 +30,6 @@ int hall = 0;
 //https://github.com/hooperwf1/rtclock/blob/main/main.c
 //https://github.com/hwfranck/lcd-avr-i2c/blob/main/src/i2c.c
 
-void write_RTC(int addr, int data) {
-    i2c_start(RTC_ADDR);
-
-    TWDR0 = addr;
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-    if ((TWSR0 & 0xF8) != TW_MT_DATA_ACK) {
-        i2c_stop();
-        return;
-    }
-
-    TWDR0 = data;
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-    if ((TWSR0 & 0xF8) != TW_MT_DATA_ACK) {
-        i2c_stop();
-        return;
-    }
-
-    i2c_stop();
-}
-
-char read_RTC(int addr) {
-    i2c_start(RTC_ADDR);
-
-    TWDR0 = addr;
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-    if ((TWSR0 & 0xF8) != TW_MT_DATA_ACK) {
-        i2c_stop();
-        return 0;
-    }
-
-    TWCR0 = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-    if ((TWSR0 & 0xF8) != TW_REP_START) {
-        i2c_stop();
-        return 0;
-    }
-
-    TWDR0 = RTC_ADDR | 1;
-
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-    if ((TWSR0 & 0xF8) != TW_MR_SLA_ACK) {
-        i2c_stop();
-        return 0;
-    }
-
-    TWCR0 = (1 << TWINT) | (1 << TWEN);
-    while (!(TWCR0 & (1 << TWINT)));
-    if ((TWSR0 & 0xF8) != TW_MR_DATA_NACK) {
-        i2c_stop();
-        return 0;
-    }
-    char temp = TWDR0;
-
-    i2c_stop();
-    return temp;
-}
-
 void update_LCD_time(void) {
     char temp;
     temp = read_RTC(1);
