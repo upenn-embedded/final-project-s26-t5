@@ -20,6 +20,12 @@ int hall = 0;
 #define HALL PC1
 #define DRAW PD2
 
+//pin mappings
+//PC5 -> SCL
+//PC4 -> SDA
+
+//to setup: lab bench, put 5V through both solenoid boards, set current limit to 2A
+
 const uint8_t digits[11][3][5] = {
     //0
     {
