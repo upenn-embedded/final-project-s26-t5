@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <avr/interrupt.h>
-
+#include <stdio.h>
 
 #include "i2c.h"
 #include "solenoid.h"
@@ -14,7 +14,7 @@
 
 volatile bool time_mode_active = true;
 volatile uint8_t mode_banner = 0;
-volatile uint8_t draw_button_event = 0;
+volatile uint32_t g_ms_ticks = 0;
 int hall = 0;
 
 #define HALL PC1
@@ -95,33 +95,63 @@ const uint8_t digits[11][3][5] = {
     } 
 };
 
+void timer_init(void) {
+    TCCR1A = 0;
+    TCCR1B = 0;
+
+    // CTC mode
+    TCCR1B |= (1 << WGM12);
+
+    // 16 MHz / 64 = 250 kHz
+    // 250 counts = 1 ms -> OCR1A = 249
+    OCR1A = 249;
+
+    // Enable compare match interrupt
+    TIMSK1 |= (1 << OCIE1A);
+
+    // Start timer, prescaler 64
+    TCCR1B |= (1 << CS11) | (1 << CS10);
+}
+
 bool read_hall_sensor() {
     return (PINC & (1 << HALL));
 }
 
 void delay_ms_var(uint16_t ms) {
-    while (ms--) {
-        _delay_ms(1);
+    uint32_t start = g_ms_ticks;
+    while ((uint32_t)(g_ms_ticks - start) < ms) {
 
     }
 }
 
-void update_lcd_status(int hall_value) {
-    char line[17];
-    char tmp[17];
-
-    lcd_move_cursor(0, 0);
-    if (time_mode_active) {
-        snprintf(line, sizeof line, "%-16s", "Time");
-    } else {
-        snprintf(line, sizeof line, "%-16s", "Draw");
+void delay_ms_checked(uint16_t ms) {
+    uint32_t start = g_ms_ticks;
+    while ((uint32_t)(g_ms_ticks - start) < ms) {
+        if (!time_mode_active) return;
     }
-    lcd_print(line);
+}
 
-    lcd_move_cursor(1, 0);
-    snprintf(tmp, sizeof tmp, "str:%d", hall_value);
-    snprintf(line, sizeof line, "%-16s", tmp);
-    lcd_print(line);
+void lcd_print_line(uint8_t line_num, const char *text) {
+    char buf[17];
+
+    // Left-justify and pad to exactly 16 chars
+    snprintf(buf, sizeof(buf), "%-16s", text);
+
+    lcd_move_cursor(line_num, 0);
+    lcd_print(buf);
+}
+
+void update_lcd_status(uint16_t hall_value) {
+    char buf[17];
+
+    if (time_mode_active) {
+        lcd_print_line(0, "Mode: Time");
+    } else {
+        lcd_print_line(0, "Mode: Draw");
+    }
+
+    snprintf(buf, sizeof(buf), "ADC: %-10u", hall_value);
+    lcd_print_line(1, buf);
 }
 
 void ADC_Init()
@@ -150,14 +180,6 @@ int ADC_Read(char channel)
 	Ain = Ain + AinLow;				
 	return(Ain);			
 }
-
-void delay_ms_checked(uint16_t ms) {
-    while (ms--) {
-        _delay_ms(1);
-        if(!time_mode_active) return;
-
-    }
-} 
 
 void init_buttons(void) {
     DDRD &= ~(1 << DRAW);   // input
@@ -191,6 +213,7 @@ int main(void) {
     init_buttons();
     ADC_Init();
     lcd_init();
+    timer_init();
     
     sei();
     while (1) {
@@ -250,6 +273,6 @@ int main(void) {
     }
 }
 
-ISR(INT0_vect) {
-    draw_button_event = 1;
+ISR(TIMER1_COMPA_vect) {
+    g_ms_ticks++;
 }

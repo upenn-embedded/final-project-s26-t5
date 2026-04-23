@@ -12,7 +12,3 @@ uint8_t i2c_write_register(uint8_t addr7, uint8_t reg, uint8_t data);
 
 uint8_t i2c_read(uint8_t *data, uint8_t send_ack);
 uint8_t i2c_read_registers(uint8_t addr7, uint8_t reg, uint8_t* buf, uint8_t len);
-        
-    
-extern uint8_t LCD_ADDR;
-void send_over_twi(uint8_t data);
