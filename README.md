@@ -6,6 +6,8 @@
 
 **Team Name: V.E.C.T.O.R**
 
+![1777082059938](image/README/1777082059938.png)
+
 | Team Member Name | Email Address           |
 | ---------------- | ----------------------- |
 | Nathan Zhang     | nzha@seas.upenn.edu     |
@@ -14,24 +16,7 @@
 
 **GitHub Repository URL:** [https://github.com/upenn-embedded/final-project-s26-t5]()
 
-**GitHub Pages Website URL:** https://upenn-embedded.github.io/final-project-s26-t5/ 
-
-## Final Project Report
-
-### 1. Video
-
-
-
-### 2. Images
-
-| ![1777081814540](image/README/1777081814540.png) | ![1777081832521](image/README/1777081832521.png) | ![1777081838726](image/README/1777081838726.png) |
-| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| ![1777081844652](image/README/1777081844652.png) | ![1777081849363](image/README/1777081849363.png) | ![1777081861400](image/README/1777081861400.png) |
-| ![1777081866209](image/README/1777081866209.png) | ![1777081869321](image/README/1777081869321.png) | ![1777081873351](image/README/1777081873351.png) |
-| ![1777081876444](image/README/1777081876444.png) | ![1777081879319](image/README/1777081879319.png) | ![1777081881959](image/README/1777081881959.png) |
-| ![1777081885170](image/README/1777081885170.png) | ![1777081909803](image/README/1777081909803.png) |                                                |
-
-## Final Project Proposal
+**GitHub Pages Website URL:** https://upenn-embedded.github.io/final-project-s26-t5/
 
 ### 1. Abstract
 
@@ -199,21 +184,36 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 ### 2. Images
 
+| ![1777081814540](image/README/1777081814540.png) | ![1777081832521](image/README/1777081832521.png) | ![1777081838726](image/README/1777081838726.png) |
+| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| ![1777081844652](image/README/1777081844652.png) | ![1777081849363](image/README/1777081849363.png) | ![1777081861400](image/README/1777081861400.png) |
+| ![1777081866209](image/README/1777081866209.png) | ![1777081869321](image/README/1777081869321.png) | ![1777081873351](image/README/1777081873351.png) |
+| ![1777081876444](image/README/1777081876444.png) | ![1777081879319](image/README/1777081879319.png) | ![1777081881959](image/README/1777081881959.png) |
+| ![1777081885170](image/README/1777081885170.png) | ![1777081909803](image/README/1777081909803.png) |                                                |
+
 ### 3. Results
 
-#### 3.1 Software Requirements Specification (SRS) Results
-
-| ID     | Description                                                                                               | Validation Outcome                                                                          |
-| ------ | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| SRS-01 | The IMU 3-axis acceleration will be measured with 16-bit depth every 100 milliseconds +/-10 milliseconds. | Confirmed, logged output from the MCU is saved to "validation" folder in GitHub repository. |
-
-#### 3.2 Hardware Requirements Specification (HRS) Results
-
-| ID     | Description                                                                                                                        | Validation Outcome                                                                                                      |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| HRS-01 | A distance sensor shall be used for obstacle detection. The sensor shall detect obstacles at a maximum distance of at least 10 cm. | Confirmed, sensed obstacles up to 15cm. Video in "validation" folder, shows tape measure and logged output to terminal. |
-|        |                                                                                                                                    |                                                                                                                         |
-
-### 4. Conclusion
-
 ## References
+
+## 3.1 Software Requirements Specification (SRS) Results
+
+| ID     | Description                                                                                                                                                                                                                       | Validation Outcome                                                                                                                                                                                                                                                                    |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SRS-01 | The system shall communicate with the two solenoid boards through the I2C bus to independently control all 15 electromagnets in the array.                                                                                        | Confirmed. The ATmega328PB communicated with the solenoid driver boards over I2C, and the final prototype activated the electromagnets in the 3x5 array through the two driver boards. Video show the driver boards powered and the electromagnet array controlling the ferrofluid. . |
+| SRS-02 | The system shall monitor Hall effect sensor readings to verify that the magnetic fields are present in the correct pattern when electromagnets are activated.                                                                     | Confirmed. The Hall effect sensor was read through the MCU ADC, and the LCD displayed the measured value during operation. The validation image shows the LCD reading “ADC: 472,” confirming live Hall sensor monitoring.                                                           |
+| SRS-03 | The system shall read the current time from the RTC module through the I2C interface periodically.                                                                                                                                | Confirmed. The RTC module was connected through I2C and the firmware was able to read time data periodically. Time displayed in time mode through the ferrofluid.                                                                                                                     |
+| SRS-04 | The system shall implement a time display mode in which the microcontroller converts the current time into a pattern of electromagnets turning on that moves the magnetic field into positions that digitally represent the time. | Confirmed. The system implemented the time mode interface and could read the current time from the RTC, the final conversion of the RTC time into a ferrofluid/electromagnet time pattern was fully completed.                                                                       |
+| SRS-05 | The system shall implement an animation mode in which the ATmega328PB sequentially activates electromagnets to predefined patterns to generate an animation.                                                                      | Confirmed. The system demonstrated a draw/animation mode where electromagnets were sequentially activated in programmed patterns. The final demo setup showed the array connected and operating through the solenoid driver boards.                                                   |
+| SRS-06 | The system shall detect button presses through hardware interrupts to switch between time display mode and animation mode.                                                                                                        | Confirmed. The two buttons were implemented as mode-select inputs using hardware interrupts.                                                                                                                                                                                         |
+
+## 3.2 Hardware Requirements Specification (HRS) Results
+
+| ID     | Description                                                                                                                                                                                                              | Validation Outcome                                                                                                                                                                                                                                    |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HRS-01 | The device shall include a 3x5 array of electromagnets each capable of being activated independently.                                                                                                                    | Confirmed. The final build includes a 3x5 array of 15 electromagnets mounted in the acrylic housing. The wiring and demo images show the full array connected to the driver boards for independent activation.                                        |
+| HRS-02 | The electromagnets shall be controlled by two 8-channel solenoid driver boards that utilize MOSFETs and flyback diodes that allow high-current switching without drawing current directly from the GPIO pins of the MCU. | Confirmed. The prototype uses two 8-channel solenoid driver boards to control the 15 electromagnets. Images show the boards connected between the ATmega328PB and the electromagnet array, preventing the MCU from directly supplying magnet current. |
+| HRS-03 | The system shall use a regulated 5V power supply capable of supplying at least 3.3A to power the electromagnets, MCU, sensors and display.                                                                               | Confirmed. The full system operated with the electromagnets, MCU, Hall sensor, RTC module, buttons, and LCD powered simultaneously, validating that the regulated 5V supply was sufficient for operation.                                             |
+| HRS-04 | The system shall use an ATmega328PB MCU to coordinate control of the electromagnets, sensors, display and the RTC module.                                                                                                | Confirmed. The ATmega328PB coordinated electromagnet control, Hall sensor ADC readings, LCD updates, RTC timekeeping, and button interrupt handling in the final prototype.                                                                           |
+| HRS-05 | The system shall include a Hall effect sensor connected to the MCU through a GPIO pin with ADC channels capable of detecting magnetic field strength generated by the electromagnet array.                               | Confirmed. The Hall effect sensor was connected to an MCU ADC channel and produced live readings on the LCD. The displayed “ADC: 472” value verifies that the sensor hardware was functioning during testing.                                       |
+| HRS-06 | The system shall include a real-time clock module connected to the MCU via I2C to keep accurate time keeping, checking the time once per second.                                                                         | Confirmed. The RTC module was integrated over I2C and used by the firmware for timekeeping. The timekeeping subsystem worked alongside the LCD and mode-control firmware.                                                                             |
+| HRS-07 | The system shall include two push buttons for selecting operating modes by interrupting the MCU and an LCD display connected through I2C to show the system status and current mode.                                     | Confirmed. The final prototype included two mode-select buttons and an I2C LCD display. The LCD displayed both operating mode and sensor status, including “Mode: Draw” and the ADC reading.                                                        |
