@@ -14,7 +14,22 @@
 
 **GitHub Repository URL:** [https://github.com/upenn-embedded/final-project-s26-t5]()
 
-**GitHub Pages Website URL:** [for final submission]*
+**GitHub Pages Website URL:** https://upenn-embedded.github.io/final-project-s26-t5/ 
+
+## Final Project Report
+
+### 1. Video
+
+
+
+### 2. Images
+
+| ![1777081814540](image/README/1777081814540.png) | ![1777081832521](image/README/1777081832521.png) | ![1777081838726](image/README/1777081838726.png) |
+| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| ![1777081844652](image/README/1777081844652.png) | ![1777081849363](image/README/1777081849363.png) | ![1777081861400](image/README/1777081861400.png) |
+| ![1777081866209](image/README/1777081866209.png) | ![1777081869321](image/README/1777081869321.png) | ![1777081873351](image/README/1777081873351.png) |
+| ![1777081876444](image/README/1777081876444.png) | ![1777081879319](image/README/1777081879319.png) | ![1777081881959](image/README/1777081881959.png) |
+| ![1777081885170](image/README/1777081885170.png) | ![1777081909803](image/README/1777081909803.png) |                                                |
 
 ## Final Project Proposal
 
@@ -155,7 +170,7 @@ Complete and validate the I2C driver interface so all 15 electromagnets can be i
 
 ## MVP Demo
 
-https://docs.google.com/presentation/d/1lgXZZuJsAKx94grMAz8MiSn8iH7MAbFuXWXLTbPirKE/edit?usp=sharing 
+https://docs.google.com/presentation/d/1lgXZZuJsAKx94grMAz8MiSn8iH7MAbFuXWXLTbPirKE/edit?usp=sharing
 
 ^MVP Demo Presentation
 
@@ -164,18 +179,16 @@ https://docs.google.com/presentation/d/1lgXZZuJsAKx94grMAz8MiSn8iH7MAbFuXWXLTbPi
 1. So far we have implemented the Atmega with the power management system with the two solenoid drivers that power the 15 electromagents (3x5) array. Right now, we have a petri-dish of ferrofluid that we can move across the array, and we programmed it so it turns on the magnets sequentially row by row. We also built a separate system with the ATmega and the peripherals with the LCD display and the buttons that toggle between time mode and animation mode, as well as taking in analog readings from the Hall effect sensor and displaying them on the LCD.
 2. Our firmware centers on the ATmega328PB, which manages the system’s two main modes: time display and animation. In time mode, the microcontroller reads the current time from the RTC over I²C, and should convert it into the corresponding activation pattern for the 3×5 electromagnet array (we have yet to do this), and updates the display; in animation mode, it instead steps through predefined electromagnet sequences to generate motion (we have yet to do this). The firmware also reads the hall-effect sensor, updates the LCD with status information, and uses button-triggered interrupts to switch modes quickly and reliably. The most important drivers we wrote were the I²C driver for communication with the RTC and solenoid-control hardware, the RTC driver for register-level time reads and writes, the button interrupt logic for mode changes.
 
-    4. We have achieved all of our software requirement specifications except one: The system displaying the time obtained by the RTC chip through the ferrofluid controlled by the electromagnets. For all the other software specification requirements, we were able to see it working, for example, the time and mode being displayed on the LCD display.
+   4. We have achieved all of our software requirement specifications except one: The system displaying the time obtained by the RTC chip through the ferrofluid controlled by the electromagnets. For all the other software specification requirements, we were able to see it working, for example, the time and mode being displayed on the LCD display.
+   5. We have achieved all of our hardware requirement specifications.
 
-    5. We have achieved all of our hardware requirement specifications.
-
-    6 &7.![1776449890355](image/README/1776449890355.png)
+   6 &7.![1776449890355](image/README/1776449890355.png)
 
 ![1776449902245](image/README/1776449902245.png)
 
-Right now, we are still just using a petri dish to hold the ferro fluid that we put on top of the magnets. We tried making an acryllic container to put the ferrofluid on top of, but it stained the acrylic glass, so now we are looking for other options. That would be what I would say is the most riskiest part of the project. We also have to make the caseing for all the electronics, to place the led display and buttons and to put the breadboard and everything, to make the project look nice and functional. 
+Right now, we are still just using a petri dish to hold the ferro fluid that we put on top of the magnets. We tried making an acryllic container to put the ferrofluid on top of, but it stained the acrylic glass, so now we are looking for other options. That would be what I would say is the most riskiest part of the project. We also have to make the caseing for all the electronics, to place the led display and buttons and to put the breadboard and everything, to make the project look nice and functional.
 
 8. No questions for the teaching team.
-
 
 ## Final Report
 
