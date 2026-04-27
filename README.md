@@ -188,7 +188,7 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 ### 1. Video
 
-[![Video Title](thumbnail.jpg)](https://drive.google.com/file/d/14hji1QMVS95bBkKa4l0b9Qzt4fvyZx8T/view?usp=sharing)
+[![description](image/README/1777081814540.png)](https://drive.google.com/file/d/14hji1QMVS95bBkKa4l0b9Qzt4fvyZx8T/view?usp=sharing)
 
 ### 2. Images
 
