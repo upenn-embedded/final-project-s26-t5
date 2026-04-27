@@ -16,7 +16,7 @@
 
 **GitHub Repository URL:** [https://github.com/upenn-embedded/final-project-s26-t5]()
 
-**GitHub Pages Website URL:** https://upenn-embedded.github.io/final-project-s26-t5/
+**GitHub Pages Website URL:** [https://upenn-embedded.github.io/final-project-s26-t5/](https://upenn-embedded.github.io/final-project-s26-t5/)
 
 ### 1. Abstract
 
