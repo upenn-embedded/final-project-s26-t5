@@ -122,11 +122,6 @@ We designed and fabricated the enclosures for the MNP reservoir and magnetic arr
 
 ![1775269485907](image/README/1775269485907.png)
 
-| col1 | col2 | col3 |
-| ---- | ---- | ---- |
-|      |      |      |
-|      |      |      |
-
 ### Current state of project
 
 Initialized I2C communication to interface with an RTC chip and LCD screen. Configured the ADC converter to convert values from the Hall effect sensor. Set up external hardware interrupts for two push buttons to toggle the system between time display mode and magnetic drawing mode. This code is attached in the github as Final_project.c
@@ -168,11 +163,6 @@ https://docs.google.com/presentation/d/1lgXZZuJsAKx94grMAz8MiSn8iH7MAbFuXWXLTbPi
    5. We have achieved all of our hardware requirement specifications.
 
    6 &7.
-
-   | col1 | col2 | col3 |
-   | ---- | ---- | ---- |
-   |      |      |      |
-   |      |      |      |
 3. ![1776449890355](image/README/1776449890355.png)
 
 ![1776449902245](image/README/1776449902245.png)
